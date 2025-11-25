@@ -2,7 +2,7 @@ import express from "express";
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Bem vindo");
+  res.send("Bem vindo - tsc-watch");
 });
 
 app.listen(3000, () => {
