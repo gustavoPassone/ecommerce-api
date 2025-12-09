@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getFirestore } from "firebase-admin/firestore";
 import { ValidationError } from "../errors/validation.error";
+import { NotFoundError } from "../errors/not-found.error";
 
 type User = {
     id: number;
@@ -27,14 +28,15 @@ export class UsersController {
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             let userId = req.params.id;
-            const doc = await getFirestore()
-                .collection("users")
-                .doc(userId)
-                .get();
-            res.send({
-                id: doc.id,
-                ...doc.data(),
-            });
+            const doc = await getFirestore().collection("users").doc(userId).get();
+            if (doc.exists) {
+              res.send({
+                  id: doc.id,
+                  ...doc.data(),
+              });
+            } else {
+              throw new NotFoundError("Usuario não encontrado")
+            }
         } catch (error) {
             next(error);
         }
@@ -57,19 +59,24 @@ export class UsersController {
         }
     }
 
-    static update(req: Request, res: Response, next: NextFunction) {
+    static async update(req: Request, res: Response, next: NextFunction) {
         try {
             let userId = req.params.id;
             let user = req.body as User;
-
-            getFirestore().collection("users").doc(userId).set({
-                nome: user.nome,
-                email: user.email,
-            });
-
-            res.send({
-                message: "Usuario alterado com sucesso",
-            });
+            let docRef = getFirestore().collection("users").doc(userId)
+            
+            if ((await docRef.get()).exists) {
+              await docRef.set({
+                  nome: user.nome,
+                  email: user.email,
+              });
+              res.send({
+                  message: "Usuario alterado com sucesso",
+              });
+            } else {
+              throw new NotFoundError("Usuário não encontrado")
+            }
+            
         } catch (error) {
             next(error);
         }
