@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gustavoPassone/ecommerce-api#readme",
   "dependencies": {
+    "celebrate": "^15.0.3",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "firebase-admin": "^13.6.0"
