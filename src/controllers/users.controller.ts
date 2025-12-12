@@ -17,14 +17,14 @@ export class UsersController {
 
         res.status(201).send({
             message: `Usuário criado com sucesso!`,
-            id: userId
+            id: userId,
         });
     }
 
     static async update(req: Request, res: Response, next: NextFunction) {
         let userId = req.params.id;
         let user = req.body as User;
-        await new UserService().update(userId, user)
+        await new UserService().update(userId, user);
         res.send({
             message: "Usuario alterado com sucesso",
         });
