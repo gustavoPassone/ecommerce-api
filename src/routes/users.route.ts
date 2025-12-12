@@ -1,13 +1,13 @@
-import express from "express";
+import { Router } from "express";
 import { UsersController } from "../controllers/users.controller";
 import asyncHandler from "express-async-handler";
 import { celebrate, Segments } from "celebrate";
 import { userSchema } from "../models/user.model";
 
-export const userRouters = express.Router();
+export const userRoutes = Router();
 
-userRouters.get("/users", asyncHandler(UsersController.getAll));
-userRouters.get("/users/:id", asyncHandler(UsersController.getById));
-userRouters.post("/users", celebrate({ [Segments.BODY]: userSchema }), asyncHandler(UsersController.save));
-userRouters.put("/users/:id",celebrate({ [Segments.BODY]: userSchema }),  asyncHandler(UsersController.update));
-userRouters.delete("/users/:id", asyncHandler(UsersController.delete));
+userRoutes.get("/users", asyncHandler(UsersController.getAll));
+userRoutes.get("/users/:id", asyncHandler(UsersController.getById));
+userRoutes.post("/users", celebrate({ [Segments.BODY]: userSchema }), asyncHandler(UsersController.save));
+userRoutes.put("/users/:id", celebrate({ [Segments.BODY]: userSchema }), asyncHandler(UsersController.update));
+userRoutes.delete("/users/:id", asyncHandler(UsersController.delete));
